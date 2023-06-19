@@ -14,9 +14,16 @@ const read = async () => {
   } catch (error) {
     if (error.code === 'ENOENT') {
         throw new Error('FS operation failed. There is no "fileToRead.txt" file');
+    } else {
+      throw error;
     }
-    throw new Error('FS operation failed');
   }
 };
 
-await read();
+(async () => {
+  try {
+    await read();
+  } catch (error) {
+    console.error(' An error occurred.\n', error.message);
+  }
+})();

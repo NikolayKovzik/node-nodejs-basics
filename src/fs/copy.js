@@ -36,11 +36,17 @@ const copy = async () => {
         }
     } catch (error) {
         if (error.code === 'ENOENT') {
-            console.log('FS operation failed: "files" directory don\'t exist.');
+            throw new Error('FS operation failed: "files" directory don\'t exist.');
         } else {
-            console.log(`${error.message}`);
+            throw error;
         }
     }
 };
 
-await copy();
+(async () => {
+    try {
+        await copy();
+    } catch (error) {
+        console.error(' An error occurred.\n', error.message);
+    }
+})();

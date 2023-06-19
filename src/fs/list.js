@@ -14,8 +14,18 @@ const list = async () => {
       console.log(fileName);
     });
   } catch (error) {
-    throw new Error('FS operation failed');
+    if (error.code === 'ENOENT') {
+      throw new Error('FS operation failed. There is no "files" directory.');
+    } else {
+      throw error;
+    }
   }
 };
 
-await list();
+(async () => {
+  try {
+    await list();
+  } catch (error) {
+    console.error(' An error occurred.\n', error.message);
+  }
+})();

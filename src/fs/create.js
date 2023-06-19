@@ -13,14 +13,20 @@ const create = async () => {
   try {
     await fsPromises.access(filePath, fsConstants.F_OK);
     throw new Error('FS operation failed: File already exists');
-  } catch (err) {
-    if (err.code === 'ENOENT') {
+  } catch (error) {
+    if (error.code === 'ENOENT') {
       await fsPromises.writeFile(filePath, fileContent);
       console.log('File created successfully');
     } else {
-        console.log(err.message);
+      throw error;
     }
   }
 };
 
-await create();
+(async () => {
+  try {
+    await create();
+  } catch (error) {
+    console.error(' An error occurred.\n', error.message);
+  }
+})();

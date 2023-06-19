@@ -16,21 +16,27 @@ const rename = async () => {
         try {
             await fs.access(newFileName, fs.constants.F_OK);
             throw new Error('FS operation failed. "properFilename.md" have already exists in files folder.');
-        } catch (renameError) {
-            if (renameError.code === 'ENOENT') {
+        } catch (error) {
+            if (error.code === 'ENOENT') {
                 await fs.rename(oldFileName, newFileName);
                 console.log('File renamed successfully.');
             } else {
-                throw new Error(renameError);
+                throw error;
             }
         }
     } catch (error) {
         if (error.code === 'ENOENT') {
-            console.log('FS operation failed. "wrongFilename.txt" don\'t exist in files folder.');
+            throw new Error('FS operation failed. "wrongFilename.txt" don\'t exist in files folder.');
         } else {
-            console.log(`${error.message}`);
+            throw error;
         }
     }
 };
 
-await rename();
+(async () => {
+    try {
+        await rename();
+    } catch (error) {
+        console.error(' An error occurred.\n', error.message);
+    }
+})();
