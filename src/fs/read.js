@@ -20,10 +20,5 @@ const read = async () => {
   }
 };
 
-(async () => {
-  try {
-    await read();
-  } catch (error) {
-    console.error(' An error occurred.\n', error.message);
-  }
-})();
+
+await read();
