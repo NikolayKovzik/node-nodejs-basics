@@ -8,7 +8,7 @@ const __dirname = dirname(__filename);
 
 const decompress = async () => {
   const inputFile = join(__dirname, 'files', 'archive.gz');
-  const outputFile = join(__dirname, 'files', 'unzippedFile.txt');
+  const outputFile = join(__dirname, 'files', 'fileToCompress.txt');
 
   const readStream = createReadStream(inputFile);
   const writeStream = createWriteStream(outputFile);
@@ -29,10 +29,4 @@ const decompress = async () => {
   });
 };
 
-(async () => {
-  try {
-    await decompress();
-  } catch (error) {
-    console.error('An error occurred:', error);
-  }
-})();
+await decompress();

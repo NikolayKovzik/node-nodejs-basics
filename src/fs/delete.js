@@ -13,17 +13,11 @@ const remove = async () => {
     console.log('File deleted successfully.');
   } catch (error) {
     if (error.code === 'ENOENT') {
-        throw new Error('FS operation failed. There is no "fileToRemove.txt" file.');
-    } else {
-        throw error;
+      throw new Error('FS operation failed. There is no "fileToRemove.txt" file.');
     }
+    throw error;
   }
 };
 
-(async () => {
-  try {
-      await remove();
-  } catch (error) {
-      console.error(' An error occurred.\n', error.message);
-  }
-})();
+
+await remove();

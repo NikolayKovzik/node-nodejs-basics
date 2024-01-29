@@ -1,4 +1,4 @@
-import { promises as fsPromises, constants as fsConstants } from 'fs';
+import { promises as fsPromises } from 'fs';
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { join } from "path";
@@ -6,47 +6,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const copy = async () => {
-    const sourceDir = join(__dirname, "files");
-    const destinationDir = join(__dirname, "files_copy");
-
     try {
-        await fsPromises.access(sourceDir, fsConstants.F_OK);
+        const sourceDir = join(__dirname, "files");
+        const destinationDir = join(__dirname, "files_copy");
 
-        try {
-            await fsPromises.access(destinationDir, fsConstants.F_OK);
-            throw new Error('FS operation failed: Destination directory already exists.');
-        } catch (error) {
-            if (error.code === 'ENOENT') {
-
-                await fsPromises.mkdir(destinationDir);
-
-                const files = await fsPromises.readdir(sourceDir);
-
-                for (const file of files) {
-                    const sourceFile = `${sourceDir}/${file}`;
-                    const destinationFile = `${destinationDir}/${file}`;
-
-                    await fsPromises.copyFile(sourceFile, destinationFile);
-                }
-
-                console.log('Files copied successfully!');
-            } else {
-                throw error;
-            }
-        }
+        await fsPromises.cp(sourceDir, destinationDir, { recursive: true, errorOnExist: true, force: false })
     } catch (error) {
-        if (error.code === 'ENOENT') {
-            throw new Error('FS operation failed: "files" directory don\'t exist.');
-        } else {
-            throw error;
+        if (error.code == 'ERR_FS_CP_EEXIST') {
+            throw new Error('FS operation failed. Target already exists');
         }
+        throw error;
     }
 };
 
-(async () => {
-    try {
-        await copy();
-    } catch (error) {
-        console.error(' An error occurred.\n', error.message);
-    }
-})();
+await copy();
+

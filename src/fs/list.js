@@ -10,9 +10,7 @@ const list = async () => {
   try {
     const folderPath = join(__dirname, 'files');
     const fileNames = await fsPromises.readdir(folderPath);
-    fileNames.forEach((fileName) => {
-      console.log(fileName);
-    });
+    console.log(fileNames);
   } catch (error) {
     if (error.code === 'ENOENT') {
       throw new Error('FS operation failed. There is no "files" directory.');
@@ -22,10 +20,4 @@ const list = async () => {
   }
 };
 
-(async () => {
-  try {
-    await list();
-  } catch (error) {
-    console.error(' An error occurred.\n', error.message);
-  }
-})();
+await list();

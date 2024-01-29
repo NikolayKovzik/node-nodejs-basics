@@ -29,10 +29,5 @@ const compress = async () => {
   });
 };
 
-(async () => {
-  try {
-    await compress();
-  } catch (error) {
-    console.error('An error occurred:', error);
-  }
-})();
+
+await compress();
